@@ -23,7 +23,8 @@ class GaluaField:
         else:
             raise ValueError("Incorrect pol")
         
-        self.__values = np.zeros((np.pow(self.__chr, self.__orp), self.__orp))
+        self.__pow = np.pow(self.__chr, self.__orp)
+        self.__values = np.zeros((self.__pow, self.__orp))
 
         self.__calculate_values()
         
@@ -38,6 +39,10 @@ class GaluaField:
     @property
     def pol(self):
         return self.__pol
+    
+    @property
+    def pow(self):
+        return self.__pow
     
     @property
     def values(self):
@@ -65,30 +70,8 @@ class GaluaField:
 
 
     def __str__(self):
-        return f"GF({np.pow(self.chr, self.orp)} = {self.chr}^{self.orp})"
+        return f"GF({self.pow} = {self.chr}^{self.orp})"
     
-    def __calculate_values():
+    def __calculate_values(self):
         pass
 
-
-class GaluaFieldElement:
-    
-    def __init__(self, gf: GaluaField, value: int):
-        self.__gf = gf
-        self.__value = value % gf.chr if type(value) == int else -1
-        if self.__value == -1:
-            raise ValueError
-
-    @property
-    def gf(self):
-        return self.__gf
-    
-    @property
-    def value(self):
-        return self.__value
-    
-    def __add__(self, other):
-        pass 
-    
-    def __mul__(self, other):
-        pass

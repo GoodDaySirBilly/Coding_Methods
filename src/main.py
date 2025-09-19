@@ -1,5 +1,7 @@
 from GaluaField import GaluaField as gf
-from GaluaField import *
+from GaluaElement import GaluaElement as el
+import numpy as np
+
 
 def main():
     
@@ -16,6 +18,8 @@ def main():
 
     print(gf2 != gf2)
     print(gf2 != gf1)
+
+    print(gf2.values)
     
 
 
