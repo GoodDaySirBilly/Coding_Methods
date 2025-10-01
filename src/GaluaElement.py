@@ -39,14 +39,14 @@ class GaluaElement:
         i = self.find_index()
         j = other.find_index()
 
-        z = 1 if i + j > 9 else 0
+        z = 1 if i + j > self.gf.pow else 0
 
         value = self.gf.values[(i + j - 1) % self.gf.pow + z]
 
         if i == 0 or j == 0:
             value = self.gf.values[0]
 
-        return GaluaElement(self.gf, value[0])
+        return GaluaElement(self.gf, value)
     
     def __floordiv__(self, other):
         i = self.find_index()
@@ -63,7 +63,9 @@ class GaluaElement:
 
         return (self.gf == other.gf) and (np.all(self.value == other.value))
 
-    
+    def __str__(self):
+        return str(self.value)
+
     def find_index(self):
         return np.where(np.all(self.gf.values == self.value, axis=1))[0]
 

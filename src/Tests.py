@@ -9,9 +9,27 @@ def run_all_tests():
     gf2 = gf(2, 4, np.array([1, 1, 0, 0, 1]))
     check_field(gf2)
 
+    check_add_sub()
+
     check_multiply()
 
     check_division()
+
+
+def check_add_sub():
+    gf1 = gf(3, 2, np.array([2, 2, 1]))
+
+    el1 = el(gf1, np.array([1, 2]))
+    
+    el2 = el(gf1, np.array([2, 1]))
+
+    assert np.all((el1+el2).value == 0)
+
+    print("Checks passed for add")
+
+    assert np.all((el1-el2).value == np.array([2, 1]))
+
+    print("Checks passed for sub")
 
 def check_field(field: gf):
 
