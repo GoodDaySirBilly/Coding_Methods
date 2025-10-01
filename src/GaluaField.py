@@ -98,12 +98,12 @@ class GaluaField:
     
     def __calculate_values(self):
 
-        characteristic = int(self.__chr)
-        extension_degree = int(self.__orp)
+        characteristic = self.chr
+        extension_degree = self.orp
 
         # normalize polynomial to be monic
-        modulus_polynomial = (self.__pol % characteristic).astype(np.int64)
-        leading_coefficient = int(modulus_polynomial[-1] % characteristic)
+        modulus_polynomial = self.pol % characteristic
+        leading_coefficient = modulus_polynomial[-1] % characteristic
         inverse_leading_coefficient = self.__modinv(leading_coefficient, characteristic)
 
         if leading_coefficient != 1:
@@ -115,7 +115,7 @@ class GaluaField:
         normalized_lower_coefficients = (modulus_polynomial[:extension_degree] * inverse_leading_coefficient) % characteristic
         reduction_coefficients = (-normalized_lower_coefficients) % characteristic  # vector length extension_degree
 
-        values_table = np.zeros((self.__pow, extension_degree), dtype=np.int64)
+        values_table = np.zeros((self.pow, extension_degree), dtype=np.int64)
 
         # zero element
         values_table[0, :] = 0
