@@ -15,6 +15,8 @@ def run_all_tests():
 
     check_division()
 
+    check_unique()
+
 
 def check_add_sub():
     gf1 = gf(3, 2, np.array([2, 2, 1]))
@@ -86,3 +88,17 @@ def check_division():
         assert np.all(res.value == b)
 
     print("Checks passed for division")
+
+
+def check_unique():
+    gf1 = gf(3, 2, np.array([2, 2, 1]))
+    gf2 = gf(11, 3, np.array([4, 1, 0, 1]))
+
+    un1 = np.unique(gf1.values, axis = 0)
+    un2 = np.unique(gf2.values, axis = 0)
+
+    print(f"\nNumber of unique elements in {str(gf1)} : {len(un1)}")
+    print(f"Number of all elements in {str(gf1)} : {len(gf1.values)}\n")
+    print(f"Number of unique elements in {str(gf2)} : {len(un2)}")
+    print(f"Number of all elements in {str(gf2)} : {len(gf2.values)}")
+    
