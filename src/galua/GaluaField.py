@@ -17,7 +17,7 @@ class GaluaField:
             raise ValueError("Incorrect orp")
 
         
-        if (type(pol) == np.ndarray) and (pol.dtype == 'int32') and \
+        if (type(pol) == np.ndarray) and \
             np.all(pol >= 0) and np.all(pol < chr) and (pol.size == orp + 1):
             self.__pol = pol
         else:
