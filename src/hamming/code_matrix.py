@@ -1,40 +1,29 @@
 import numpy as np
-
+from .GaluaField import GaluaField as gf
+from .GaluaElement import GaluaElement as el
 '''
 File that has functions to build matricies by code params for another purposes 
 '''
 
-def build_generator_matrix(
-    code_length: int, # n
-    base_length: int  # k
-) -> np.ndarray[np.int32, np.int32]:
-    
-    '''
-    Return generator matrix G of linear block (n, k) code [k x n] size
-    '''
-
-    result = np.empty([base_length, code_length]) # sizes of result
-
-    return result
-
 
 def build_parity_check_matrix(
-    generator_matrix: np.ndarray[np.int32, np.int32] # G
+        code_length: int,  # n
+        base_length: int   # k
 ) -> np.ndarray[np.int32, np.int32]:
-    
-    '''
-    Return parity-check matrix H of linear block (n, k) code [r x n] size
-    r = n - k
-    '''
-    
-    # find shapes of G
-    base_length, code_length = generator_matrix.shape
 
-    # find nmber of excess symbols
-    exss_length = code_length - base_length
+    identity = np.eye(base_length, dtype=np.int32)
+    gf1 = gf(2, code_length - base_length, )#np.array([2, 2, 1]))
+    parity_check_matrix = np.hstack([gf1,identity])
+    return parity_check_matrix
 
 
 
-    result = np.empty([exss_length, code_length]) # sizes of result
+def build_generator_matrix(
+    parity_check_matrix: np.ndarray[np.int32, np.int32]
+) -> np.ndarray[np.int32, np.int32]:
 
-    return result
+    identity = np.eye(parity_check_matrix.base_length, dtype=np.int32)
+    P_submatrix = parity_check_matrix[:, :parity_check_matrix.code_length-parity_check_matrix.base_length + 1]
+    P_transposed = P_submatrix.T  # Транспонирование
+    generator_matrix = np.hstack([identity, P_transposed]);
+    return generator_matrix
