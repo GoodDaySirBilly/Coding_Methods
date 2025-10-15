@@ -76,14 +76,23 @@ class ThreadGenerator:
 
         rows, cols = result.shape
 
-        # handle erasures if base supports 'z'
         if 'z' in self.base and p_erase > 0.0:
-            erase_mask = np.random.rand(rows, cols) < p_erase
+            if p_erase >= 1.0:
+                erase_mask = np.ones((rows, cols), dtype=bool)
+            else:
+                z_norm = np.random.randn(rows, cols)
+                u_uniform = 0.5 * (1.0 + np.erf(z_norm / np.sqrt(2.0)))
+                erase_mask = u_uniform < p_erase
             result[erase_mask] = 'z'
 
         # flipping/errors for remaining symbols
         if self._q == 2 and p_flip > 0.0:
-            flip_mask = np.random.rand(rows, cols) < p_flip
+            if p_flip >= 1.0:
+                flip_mask = np.ones((rows, cols), dtype=bool)
+            else:
+                z_norm = np.random.randn(rows, cols)
+                u_uniform = 0.5 * (1.0 + np.erf(z_norm / np.sqrt(2.0)))
+                flip_mask = u_uniform < p_flip
 
             if 'z' in self.base:
                 # do not flip erased symbols
@@ -105,7 +114,12 @@ class ThreadGenerator:
             numeric[result == '1'] = 1
             numeric[result == '2'] = 2
 
-            flip_mask = np.random.rand(rows, cols) < p_flip
+            if p_flip >= 1.0:
+                flip_mask = np.ones((rows, cols), dtype=bool)
+            else:
+                z_norm = np.random.randn(rows, cols)
+                u_uniform = 0.5 * (1.0 + np.erf(z_norm / np.sqrt(2.0)))
+                flip_mask = u_uniform < p_flip
 
             # choose +1 or +2 (mod 3)
             step = np.random.randint(1, 3, size=(rows, cols))
