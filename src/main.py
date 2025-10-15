@@ -1,12 +1,8 @@
-from GaluaField import GaluaField as gf
-from GaluaElement import GaluaElement as el
-import numpy as np
-
-from Tests import run_all_tests
+from galua import Tests as galua_tests
 
 def main():
 
-    run_all_tests()
+    galua_tests.run_all_tests()
 
     
 if __name__ == '__main__':

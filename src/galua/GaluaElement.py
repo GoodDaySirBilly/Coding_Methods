@@ -1,4 +1,4 @@
-from GaluaField import *
+from .GaluaField import *
 
 class GaluaElement:
     
@@ -9,7 +9,7 @@ class GaluaElement:
         else:
             raise ValueError("Incorrect gf")
 
-        if (type(value) == np.ndarray) and (value.dtype == 'int64') and \
+        if (type(value) == np.ndarray) and (value.dtype == 'int32') and \
             np.all(value >= 0) and np.all(value < gf.chr) and (value.size == gf.orp):
             self.__value = value
         else:

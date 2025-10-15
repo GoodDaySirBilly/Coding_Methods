@@ -17,14 +17,14 @@ class GaluaField:
             raise ValueError("Incorrect orp")
 
         
-        if (type(pol) == np.ndarray) and (pol.dtype == 'int64') and \
+        if (type(pol) == np.ndarray) and (pol.dtype == 'int32') and \
             np.all(pol >= 0) and np.all(pol < chr) and (pol.size == orp + 1):
             self.__pol = pol
         else:
             raise ValueError("Incorrect pol")
         
         self.__pow = int(np.power(self.__chr, self.__orp))
-        self.__values = np.zeros((self.__pow, self.__orp), dtype=np.int64)
+        self.__values = np.zeros((self.__pow, self.__orp), dtype=np.int32)
 
         self.__calculate_values()
         
@@ -115,13 +115,13 @@ class GaluaField:
         normalized_lower_coefficients = (modulus_polynomial[:extension_degree] * inverse_leading_coefficient) % characteristic
         reduction_coefficients = (-normalized_lower_coefficients) % characteristic  # vector length extension_degree
 
-        values_table = np.zeros((self.pow, extension_degree), dtype=np.int64)
+        values_table = np.zeros((self.pow, extension_degree), dtype=np.int32)
 
         # zero element
         values_table[0, :] = 0
 
         #x^0
-        current_element_coeffs = np.zeros(extension_degree, dtype=np.int64)
+        current_element_coeffs = np.zeros(extension_degree, dtype=np.int32)
         current_element_coeffs[0] = 1
 
         values_table[1, :] = current_element_coeffs
@@ -130,7 +130,7 @@ class GaluaField:
         for _ in range(2, self.__pow):
             overflow_coefficient = int(current_element_coeffs[-1])
             # shift
-            shifted_coeffs = np.zeros(extension_degree, dtype=np.int64)
+            shifted_coeffs = np.zeros(extension_degree, dtype=np.int32)
             shifted_coeffs[1:] = current_element_coeffs[:-1]
 
             if overflow_coefficient != 0:
