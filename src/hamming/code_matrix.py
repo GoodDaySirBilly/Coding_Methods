@@ -11,9 +11,12 @@ def build_parity_check_matrix(
         base_length: int   # k
 ) -> np.ndarray[np.int32, np.int32]:
 
-    identity = np.eye(base_length, dtype=np.int32)
+    identity = np.eye(code_length-base_length, dtype=np.int32)
     gf1 = gf(2, code_length - base_length, )#np.array([2, 2, 1]))
-    parity_check_matrix = np.hstack([gf1,identity])
+    P = np.empty([code_length - base_length, base_length])
+    for i in range(0,code_length - base_length):
+        P[i] = gf1[i]
+    parity_check_matrix = np.hstack([P,identity])
     return parity_check_matrix
 
 
@@ -23,7 +26,7 @@ def build_generator_matrix(
 ) -> np.ndarray[np.int32, np.int32]:
 
     identity = np.eye(parity_check_matrix.base_length, dtype=np.int32)
-    P_submatrix = parity_check_matrix[:, :parity_check_matrix.code_length-parity_check_matrix.base_length + 1]
+    P_submatrix = parity_check_matrix[:, :parity_check_matrix.base_length]
     P_transposed = P_submatrix.T  # Транспонирование
     generator_matrix = np.hstack([identity, P_transposed]);
     return generator_matrix
