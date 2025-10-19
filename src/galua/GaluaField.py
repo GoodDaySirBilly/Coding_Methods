@@ -70,7 +70,10 @@ class GaluaField:
 
 
     def __str__(self):
-        return f"GF({self.pow} = {self.chr}^{self.orp})"
+        result = f"GF({self.pow} = {self.chr}^{self.orp})\n"
+        for i, row in enumerate(self.values, 0):
+            result += f'{"v^"+str(i-1) if i>1 else i}: {row}\n'
+        return result
 
     @staticmethod
     def __modinv(value: int, modulus: int) -> int:

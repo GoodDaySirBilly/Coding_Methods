@@ -46,7 +46,7 @@ class GaluaElement:
         if i == 0 or j == 0:
             value = self.gf.values[0]
 
-        return GaluaElement(self.gf, value)
+        return GaluaElement(self.gf, value.reshape(self.gf.orp))
     
     def __floordiv__(self, other):
         i = self.find_index()
@@ -55,16 +55,17 @@ class GaluaElement:
         if j == 0:
             raise ZeroDivisionError("Field does not has zero divisors")
         elif j == 1:
-            return self * GaluaElement(self.gf, self.gf.values[1])
+            return self * GaluaElement(self.gf, self.gf.values[1].reshape(self.gf.orp))
         else:
-            return self * GaluaElement(self.gf, self.gf.values[1 + self.gf.pow - j])
+            return self * GaluaElement(self.gf, self.gf.values[1 + self.gf.pow - j].reshape(self.gf.orp))
     
     def __eq__(self, other):
 
         return (self.gf == other.gf) and (np.all(self.value == other.value))
 
     def __str__(self):
-        return str(self.value)
+        i = self.find_index()[0]
+        return f"{'v^'+str(i-1) if i>1 else i} : " + str(self.value)
 
     def find_index(self):
         return np.where(np.all(self.gf.values == self.value, axis=1))[0]
