@@ -1,4 +1,4 @@
-from .input_thread import ThreadGenerator
+from hamming.ThreadGenerator import ThreadGenerator
 import numpy as np
 
 

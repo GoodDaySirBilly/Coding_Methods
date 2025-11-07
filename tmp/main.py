@@ -1,21 +1,32 @@
-import str_1, str_2
+from abc import ABC, abstractmethod
 
+class BaseClass(ABC):
 
-def main():
-    
-    a = str_1.ClassicCoder(5, 4)
-    b = str_2.ShortenedCoder(7, 8)
+    def __init__(self):
+        self.__z = 1
 
-    print(a.code_word())
-    print(a.code_word_array())
-    print(b.code_word())
-    print(b.code_word_array())
+    @property
+    @abstractmethod
+    def required_field(self):
+        """This property must be implemented by subclasses."""
+        pass
 
-    print(a.code_length)
-    print(a.base_length)
-    
-    print(b.code_length)
-    print(b.base_length)
+    @property
+    def z(self): return self.__z
 
-if __name__ == '__main__':
-    main()
+class ConcreteClass(BaseClass):
+    def __init__(self, value):
+        super().__init__()
+        self._required_field = value
+
+    @property
+    def required_field(self):
+        return self._required_field
+
+# This would raise a TypeError because required_field is not implemented
+# invalid_instance = BaseClass() 
+
+# This works because ConcreteClass implements required_field
+instance = ConcreteClass("Hello")
+print(instance.required_field)
+print(instance.z)

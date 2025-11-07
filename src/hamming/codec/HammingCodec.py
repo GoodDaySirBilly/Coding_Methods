@@ -1,14 +1,20 @@
-from .code_matrix import *
+import numpy as np
 
-class Hamming:
+from linalg.code_matrix import *
+
+class HammingCodec:
+
+    # self.coder
+    # self.decoder
 
     code_types = ["classic", "shortened", "extended"]
 
     def __init__(self,
-                 code_length: int,
-                 base_length: int,
-                 gf: GaluaField,
-                 type="shortened"):
+        code_length: int,
+        base_length: int,
+        gf: GaluaField,
+        type="shortened"
+    ):
         self.code_length = code_length
         self.base_length = base_length
         self.exss_length = code_length - base_length

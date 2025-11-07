@@ -1,6 +1,7 @@
 import numpy as np
-from src.galua.GaluaField import GaluaField
-from src.galua.GaluaElement import GaluaElement
+
+from galua.GaluaField import GaluaField
+from galua.GaluaElement import GaluaElement
 
 
 '''
