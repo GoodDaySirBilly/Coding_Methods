@@ -1,5 +1,5 @@
-from .GaluaField import GaluaField as gf
-from .GaluaElement import GaluaElement as el
+from galua.GaluaField import GaluaField as gf
+from galua.GaluaElement import GaluaElement as el
 import numpy as np
 
 def run_all_tests():
@@ -17,7 +17,6 @@ def run_all_tests():
 
     check_unique()
 
-    var15()
 
 
 def check_add_sub():
@@ -50,7 +49,7 @@ def check_field(field: gf):
     # uniqueness of all nonzero elements
     uniq_nonzero = np.unique(field.values[1:], axis=0)
     assert uniq_nonzero.shape[0] == field.pow - 1, "Nonzero elements must be unique; check irreducible/primitive polynomial."
-    print(f"Checks passed for {field}")
+    print(f"Checks passed for GF({field.chr}^{field.orp})")
 
 
 def check_multiply():
@@ -99,84 +98,9 @@ def check_unique():
     un1 = np.unique(gf1.values, axis = 0)
     un2 = np.unique(gf2.values, axis = 0)
 
-    # print(f"\nNumber of unique elements in {str(gf1)} : {len(un1)}")
-    # print(f"Number of all elements in {str(gf1)} : {len(gf1.values)}\n")
-    # print(f"Number of unique elements in {str(gf2)} : {len(un2)}")
-    # print(f"Number of all elements in {str(gf2)} : {len(gf2.values)}")
+    assert np.all(un1.size == gf1.values.size)
+    assert np.all(un2.size == gf2.values.size)
+
+    print("Checks passed for unique elements")
     
-def var15():
-    # Creating Galua Field GF(2^6)
-    gf1 = gf(2, 6, np.array([1, 1, 0, 0, 0, 0, 1]))
-
-    gf2 = gf(11, 3, np.array([4, 1, 0, 1]))
-
-    print("-------------------------------")
-    print(gf1)
-
-    # Creating elements of field
-    el1 = el(gf1, np.array([1, 0, 0, 0, 1, 1]))
-    el2 = el(gf1, np.array([0, 0, 1, 0, 0, 0]))
-
-    one = el(gf1, np.array([1, 0, 0, 0, 0, 0]))
-    zero = el(gf1, np.array([0, 0, 0, 0, 0, 0]))
-
-    print("Element 1")
-    print(el1)
-    print("Element 2")
-    print(el2)
-
-    print("Sum of elements")
-    print(el1 + el2)
-
-    print("Sub of elements")
-    print(el1 - el2)
-
-    print("Mul of elements")
-    print(el1 * el2)
-
-    print("Div of elements")
-    print(el1 // el2)
-
-    print("Multiplying by one")
-    print(el1 * one)
-
-    print("Division by one")
-    print(el1 // one)
-
-    print("Multiplying by zero")
-    print(el1 * zero)
-
-    print("-------------------------------")
-    print(gf2)
-
-    el1 = el(gf2, np.array([2, 6, 6]))
-    el2 = el(gf2, np.array([0, 0, 1]))
-
-    one = el(gf2, np.array([1, 0, 0]))
-    zero = el(gf2, np.array([0, 0, 0]))
-
-    print("Element 1")
-    print(el1)
-    print("Element 2")
-    print(el2)
-
-    print("Sum of elements")
-    print(el1 + el2)
-
-    print("Sub of elements")
-    print(el1 - el2)
-
-    print("Mul of elements")
-    print(el1 * el2)
-
-    print("Div of elements")
-    print(el1 // el2)
-
-    print("Multiplying by one")
-    print(el1 * one)
-
-    print("Division by one")
-    print(el1 // one)
-
-    print("Multiplying by zero")
-    print(el1 * zero)
+    

@@ -1,33 +1,39 @@
 import numpy as np
-import matplotlib.pyplot as plot
 
 class GaluaField:
     
-    def __init__(self, chr: int, orp: int, pol: np.array):
+    def __init__(self, chr: int, orp: int, pol: list[int]):
         
-        if (type(chr) == int) and (chr > 0):
+        if (not isinstance(chr, int)) or (not isinstance(orp, int)):
+            raise ValueError("Incorrect datatype")
+
+        if chr > 0:
             self.__chr = chr
         else:
             raise ValueError("Incorrect chr")
 
 
-        if (type(orp) == int) and (orp > 0):
+        if orp > 0:
             self.__orp = orp
         else:
             raise ValueError("Incorrect orp")
 
         
-        if (type(pol) == np.ndarray) and (pol.dtype == 'int32') and \
-            np.all(pol >= 0) and np.all(pol < chr) and (pol.size == orp + 1):
-            self.__pol = pol
+        if np.all(pol >= 0) and np.all(pol < chr) and (pol.size == orp + 1):
+            self.__pol = np.array(pol)
+            self.__local_dtype = self.pol.dtype
         else:
             raise ValueError("Incorrect pol")
         
         self.__pow = int(np.power(self.__chr, self.__orp))
-        self.__values = np.zeros((self.__pow, self.__orp), dtype=np.int32)
+        self.__values = np.zeros((self.__pow, self.__orp), dtype=self.local_dtype)
 
         self.__calculate_values()
         
+    @property
+    def local_dtype(self):
+        return self.__local_dtype
+
     @property
     def chr(self):
         return self.__chr
@@ -118,13 +124,13 @@ class GaluaField:
         normalized_lower_coefficients = (modulus_polynomial[:extension_degree] * inverse_leading_coefficient) % characteristic
         reduction_coefficients = (-normalized_lower_coefficients) % characteristic  # vector length extension_degree
 
-        values_table = np.zeros((self.pow, extension_degree), dtype=np.int32)
+        values_table = np.zeros((self.pow, extension_degree), dtype=self.local_dtype)
 
         # zero element
         values_table[0, :] = 0
 
         #x^0
-        current_element_coeffs = np.zeros(extension_degree, dtype=np.int32)
+        current_element_coeffs = np.zeros(extension_degree, dtype=self.local_dtype)
         current_element_coeffs[0] = 1
 
         values_table[1, :] = current_element_coeffs
@@ -133,7 +139,7 @@ class GaluaField:
         for _ in range(2, self.__pow):
             overflow_coefficient = int(current_element_coeffs[-1])
             # shift
-            shifted_coeffs = np.zeros(extension_degree, dtype=np.int32)
+            shifted_coeffs = np.zeros(extension_degree, dtype=self.local_dtype)
             shifted_coeffs[1:] = current_element_coeffs[:-1]
 
             if overflow_coefficient != 0:

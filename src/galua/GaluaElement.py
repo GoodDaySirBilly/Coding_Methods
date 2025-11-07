@@ -1,20 +1,16 @@
-from .GaluaField import *
+from galua.GaluaField import *
 
 class GaluaElement:
     
     def __init__(self, gf: GaluaField, value: np.ndarray):
 
-        if type(gf) == GaluaField:
-            self.__gf = gf
-        else:
-            raise ValueError("Incorrect gf")
+        self.__gf = gf
 
-        if (type(value) == np.ndarray) and (value.dtype == 'int32') and \
-            np.all(value >= 0) and np.all(value < gf.chr) and (value.size == gf.orp):
+        if np.all(value >= 0) and np.all(value < gf.chr) and (value.size == gf.orp):
             self.__value = value
         else:
             raise ValueError("Incorrect value")
-
+# np.array(list(a)).astype(int)
     @property
     def gf(self):
         return self.__gf

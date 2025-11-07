@@ -1,11 +1,11 @@
-from galua import Tests as galua_tests
-from hamming import Tests as hamming_tests
+from galua.Tests import run_all_tests as run_galua_tests
+from hamming.Tests import run_all_tests as run_hamming_tests
 
 def main():
 
-    # galua_tests.run_all_tests()
+    run_galua_tests()
     
-    hamming_tests.run_all_tests()
+    # run_hamming_tests()
 
 
     

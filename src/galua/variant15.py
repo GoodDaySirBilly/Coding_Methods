@@ -8,11 +8,11 @@ gf1 = gf(2, 6, np.array([1, 1, 0, 0, 0, 0, 1]))
 gf2 = gf(11, 3, np.array([4, 1, 0, 1]))
 
 print("-------------------------------")
-#print(gf1)
+print(gf1)
 
 # Creating elements of field
 el1 = el(gf1, np.array([1, 0, 0, 0, 1, 1]))
-el2 = el(gf1, np.array([1, 0, 0, 1, 0, 1]))
+el2 = el(gf1, np.array([0, 0, 1, 0, 0, 0]))
 
 one = el(gf1, np.array([1, 0, 0, 0, 0, 0]))
 zero = el(gf1, np.array([0, 0, 0, 0, 0, 0]))
@@ -44,10 +44,10 @@ print("Multiplying by zero")
 print(el1 * zero)
 
 print("-------------------------------")
-# print(gf2)
+print(gf2)
 
-el1 = el(gf2, np.array([1, 4, 0]))
-el2 = el(gf2, np.array([0, 1, 0]))
+el1 = el(gf2, np.array([2, 6, 6]))
+el2 = el(gf2, np.array([0, 0, 1]))
 
 one = el(gf2, np.array([1, 0, 0]))
 zero = el(gf2, np.array([0, 0, 0]))
