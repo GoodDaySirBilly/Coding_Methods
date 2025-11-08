@@ -10,12 +10,60 @@ def run_all_tests():
 
 def parity_check():
 
-    pass
+    code_length = 7
+    base_length = 4
+    exss_length = code_length - base_length
+
+    hamming_code = (code_length, base_length)
+
+    gf1 = GaluaField(2, exss_length, [1, 0, 1, 1])
+
+    H = build_parity_check_matrix(code_length, base_length, gf1)
+
+    assert np.all(H.shape == (exss_length, code_length))
+    assert np.all(H == 
+        np.array([
+            [1, 0, 0, 1, 1, 1, 0],
+            [0, 1, 0, 0, 1, 1, 1],
+            [0, 0, 1, 1, 1, 0, 1]
+        ])
+    )
+
 
 def generator_check():
 
-    pass
+    H = np.array([
+        [1, 0, 0, 1, 1, 1, 0],
+        [0, 1, 0, 0, 1, 1, 1],
+        [0, 0, 1, 1, 1, 0, 1]
+    ])
+
+    G = build_generator_matrix(H)
+
+    assert np.all(G == 
+        np.array([
+            [1, 0, 1, 1, 0, 0, 0],
+            [1, 1, 1, 0, 1, 0, 0],
+            [1, 1, 0, 0, 0, 1, 0],
+            [0, 1, 1, 0, 0, 0, 1]
+        ])
+    )
+
 
 def syndrom_check():
 
-    pass
+    word = np.array([1, 0, 1, 0])
+
+    H = np.array([
+        [1, 0, 0, 1, 1, 1, 0],
+        [0, 1, 0, 0, 1, 1, 1],
+        [0, 0, 1, 1, 1, 0, 1]
+    ])
+
+    G = build_generator_matrix(H)
+
+    word = word @ G % 2
+
+    s = syndrom(word, H) % 2
+
+    assert np.all(s == 0)

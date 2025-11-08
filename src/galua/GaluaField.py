@@ -19,7 +19,8 @@ class GaluaField:
             raise ValueError("Incorrect orp")
 
         
-        if np.all(pol >= 0) and np.all(pol < chr) and (pol.size == orp + 1):
+        if all([i>=0 for i in pol]) and all([i<chr for i in pol]) \
+            and (len(pol) == orp + 1):
             self.__pol = np.array(pol)
             self.__local_dtype = self.pol.dtype
         else:
