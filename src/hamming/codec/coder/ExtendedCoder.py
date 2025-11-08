@@ -11,10 +11,27 @@ class ClassicCoder(Coder):
 
         self.extend_code_length = code_length + 1
 
+        self.extend_parity = np.copy(self.parity_check_matrix)
+
+        rows, cols = self.extend_parity.shape
+
+        self.extend_parity = np.concat([
+            np.zeros([rows, 1]), self.extend_parity
+        ], axis=1)
+
+        self.extend_parity = np.concat([
+            np.ones([1, cols + 1]), self.extend_parity
+        ], axis=0)
+
+        self.generator_matrix = build_generator_matrix(
+            self.extend_parity
+        )
+
     @property
     def extend_code_length(self):
         return self.extend_code_length
         
 
     def code_words(self, words):
-        return super().code_words(words)
+
+        return words @ self.generator_matrix % self.gf.chr

@@ -10,4 +10,5 @@ class ClassicCoder(Coder):
         super().__init__(code_length, base_length, gf)
 
     def code_words(self, words):
-        return super().code_words(words)
+        
+        return words @ self.generator_matrix % self.gf.chr

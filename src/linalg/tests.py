@@ -7,6 +7,7 @@ def run_all_tests():
     parity_check()
     generator_check()
     syndrom_check()
+    print("All Linalg tests passed")
 
 def parity_check():
 
@@ -67,3 +68,11 @@ def syndrom_check():
     s = syndrom(word, H) % 2
 
     assert np.all(s == 0)
+
+    e = np.array([0, 0, 0, 0, 1, 0, 0])
+
+    word += e
+
+    s = syndrom(word, H) % 2
+
+    assert np.all(s == H[:, 4])
