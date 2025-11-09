@@ -42,6 +42,30 @@ class Decoder(ABC):
     @property 
     def gf(self):
         return self.gf
+    
+    @code_length.setter
+    def code_length(self, value):
+        self._code_length = value
+
+    @base_length.setter
+    def base_length(self, value):
+        self._base_length = value
+
+    @exss_length.setter
+    def exss_length(self, value):
+        self._exss_length = value
+
+    @parity_check_matrix.setter
+    def parity_check_matrix(self, value):
+        self._parity_check_matrix = value
+
+    @generator_matrix.setter
+    def generator_matrix(self, value):
+        self._generator_matrix = value
+
+    @gf.setter
+    def gf(self, value):
+        self._gf = value
 
     
     @abstractmethod

@@ -2,7 +2,7 @@ import numpy as np
 
 from .Coder import *
 
-class ClassicCoder(Coder):
+class ShortenedCoder(Coder):
 
     def __init__(self,
         code_length: int, base_length: int, gf: GaluaField,
@@ -13,14 +13,24 @@ class ClassicCoder(Coder):
         self.short_code_length = short_code_length
         self.short_base_length = short_base_length
 
-    @property 
-    def short_code_length(self):
-        return self.short_code_length
+        if short_code_length >= code_length or \
+            short_base_length > base_length:
+            raise ValueError("short length >= common lengh")
+        
+        self.parity_check_matrix = self.parity_check_matrix[
+            :, short_code_length:
+        ]
 
-    @property 
-    def short_base_length(self):
-        return self.short_base_length
+        self.generator_matrix = self.generator_matrix[
+            short_code_length:, short_code_length:
+        ]
+
+
+        HGt = self.parity_check_matrix @ self.generator_matrix.T % self.gf.chr
+
+        if not np.all(HGt == 0):
+            raise ValueError("matrix ortoghonal error")
     
 
     def code_words(self, words):
-        return super().code_words(words)
+        return words @ self.generator_matrix % self.gf.chr

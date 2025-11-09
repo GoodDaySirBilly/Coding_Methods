@@ -8,6 +8,7 @@ def run_all_tests():
     test_generate_data_thread_binary_flip_respects_erasures()
     test_generate_data_thread_ternary_flip_changes()
     test_generate_data_thread_no_change_zero_probs()
+    thread_words_generator_test()
     print("All Generator tests passed")
 
 
@@ -17,7 +18,7 @@ def test_generate_data_thread_binary_flip_all():
         ['1', '1', '0', '0']
     ], dtype=np.str_)
     G = np.array([[1, 0, 1, 0]], dtype=np.int32)
-    gen = ThreadGenerator(ThreadGenerator.base_2, G)
+    gen = ThreadGenerator(ThreadGenerator.base_2, G.shape[0], G.shape[1])
 
     flipped = gen.generate_data_thread(words, [1.0])
 
@@ -34,7 +35,7 @@ def test_generate_data_thread_binary_erase_all():
         ['1', '0', '1']
     ], dtype=np.str_)
     G = np.array([[1, 1, 1]], dtype=np.int32)
-    gen = ThreadGenerator(ThreadGenerator.base_2er, G)
+    gen = ThreadGenerator(ThreadGenerator.base_2er, G.shape[0], G.shape[1])
 
     erased = gen.generate_data_thread(words, [0.0, 1.0])
     assert np.all(erased == 'z')
@@ -46,7 +47,7 @@ def test_generate_data_thread_binary_flip_respects_erasures():
         ['z', '1', 'z', '0']
     ], dtype=np.str_)
     G = np.array([[1, 0, 1, 0]], dtype=np.int32)
-    gen = ThreadGenerator(ThreadGenerator.base_2er, G)
+    gen = ThreadGenerator(ThreadGenerator.base_2er, G.shape[0], G.shape[1])
 
     flipped = gen.generate_data_thread(words, [1.0, 0.0])
 
@@ -66,7 +67,7 @@ def test_generate_data_thread_ternary_flip_changes():
         ['2', '0', '1']
     ], dtype=np.str_)
     G = np.array([[1, 0, 0]], dtype=np.int32)
-    gen = ThreadGenerator(ThreadGenerator.base_3, G)
+    gen = ThreadGenerator(ThreadGenerator.base_3, G.shape[0], G.shape[1])
 
     result = gen.generate_data_thread(words, [1.0])
 
@@ -80,7 +81,7 @@ def test_generate_data_thread_no_change_zero_probs():
         ['1', '0', '1']
     ], dtype=np.str_)
     G = np.array([[1, 0, 1]], dtype=np.int32)
-    gen_bin = ThreadGenerator(ThreadGenerator.base_2, G)
+    gen_bin = ThreadGenerator(ThreadGenerator.base_2, G.shape[0], G.shape[1])
     same_bin = gen_bin.generate_data_thread(words_bin, [0.0])
     assert np.array_equal(same_bin, words_bin)
 
@@ -88,6 +89,13 @@ def test_generate_data_thread_no_change_zero_probs():
         ['0', '1', '2'],
         ['1', '2', '0']
     ], dtype=np.str_)
-    gen_ter = ThreadGenerator(ThreadGenerator.base_3, G)
+    gen_ter = ThreadGenerator(ThreadGenerator.base_3, G.shape[0], G.shape[1])
     same_ter = gen_ter.generate_data_thread(words_ter, [0.0])
     assert np.array_equal(same_ter, words_ter)
+
+def thread_words_generator_test():
+
+    gen = ThreadGenerator(ThreadGenerator.base_2, 7, 4)
+    words = gen.generate_words_thread(5)
+
+    assert np.all(words.shape == (5, 4))

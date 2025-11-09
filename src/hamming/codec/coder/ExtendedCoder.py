@@ -2,36 +2,33 @@ import numpy as np
 
 from .Coder import *
 
-class ClassicCoder(Coder):
+class ExtendedCoder(Coder):
 
     def __init__(self,
         code_length: int, base_length: int, gf: GaluaField
     ):
         super().__init__(code_length, base_length, gf)
 
-        self.extend_code_length = code_length + 1
-
         self.extend_parity = np.copy(self.parity_check_matrix)
 
         rows, cols = self.extend_parity.shape
 
         self.extend_parity = np.concat([
-            np.zeros([rows, 1]), self.extend_parity
+            self.extend_parity, np.zeros([rows, 1], dtype=int), 
         ], axis=1)
 
         self.extend_parity = np.concat([
-            np.ones([1, cols + 1]), self.extend_parity
+            np.ones([1, cols + 1], dtype=int), self.extend_parity
         ], axis=0)
-
-        self.generator_matrix = build_generator_matrix(
-            self.extend_parity
-        )
-
-    @property
-    def extend_code_length(self):
-        return self.extend_code_length
         
 
     def code_words(self, words):
 
-        return words @ self.generator_matrix % self.gf.chr
+        result = words @ self.generator_matrix % self.gf.chr
+
+        even_bits = np.sum(result, axis=1) % self.gf.chr
+        even_bits = even_bits[:, np.newaxis]
+
+        result = np.concat([result, even_bits], axis=1)
+
+        return result

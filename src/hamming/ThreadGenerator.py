@@ -8,8 +8,7 @@ class ThreadGenerator:
     base_3 =      ['0', '1', '2']
 
     def __init__(self,
-        base: list[str],
-        generator_matrix: np.ndarray[np.int32, np.int32],
+        base: list[str], code_length: int, base_length: int
     ) -> None:
         '''
         Create object of thread of data generator
@@ -25,10 +24,7 @@ class ThreadGenerator:
 
         self._q = len(self._digits)
 
-        # store generator matrix
-        self._G = np.asarray(generator_matrix, dtype=np.int32)
-
-        self._k, self._n = self._G.shape
+        self._n, self._k = code_length, base_length
 
 
     def generate_words_thread(self, 
@@ -46,14 +42,7 @@ class ThreadGenerator:
         # random information vectors over GF(q)
         info_vectors = np.random.randint(0, self._q, size=(words_num, self._k), dtype=np.int32)
 
-        # linear combination over GF(q)
-        codewords_numeric = (info_vectors @ self._G) % self._q
-
-        # map numeric symbols to string symbols
-        symbol_map = np.array(self._digits, dtype=np.str_)
-        words_thread = symbol_map[codewords_numeric]
-
-        return words_thread
+        return info_vectors
         
 
     def generate_data_thread(self, 

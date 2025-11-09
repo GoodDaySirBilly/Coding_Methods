@@ -17,31 +17,55 @@ class Coder(ABC):
             self.code_length, self.exss_length, gf
         )
 
-        self.generator_matrix = build_generator_matrix(self.H)
+        self.generator_matrix = build_generator_matrix(self.parity_check_matrix)
 
     @property 
     def code_length(self):
-        return self.code_length
+        return self._code_length
 
     @property 
     def base_length(self):
-        return self.base_length
+        return self._base_length
 
     @property
     def exss_length(self):
-        return self.exss_length
+        return self._exss_length
 
     @property 
     def parity_check_matrix(self):
-        return self.parity_check_matrix
+        return self._parity_check_matrix
     
     @property
     def generator_matrix(self):
-        return self.generator_matrix
+        return self._generator_matrix
     
     @property 
     def gf(self):
-        return self.gf
+        return self._gf
+    
+    @code_length.setter
+    def code_length(self, value):
+        self._code_length = value
+
+    @base_length.setter
+    def base_length(self, value):
+        self._base_length = value
+
+    @exss_length.setter
+    def exss_length(self, value):
+        self._exss_length = value
+
+    @parity_check_matrix.setter
+    def parity_check_matrix(self, value):
+        self._parity_check_matrix = value
+
+    @generator_matrix.setter
+    def generator_matrix(self, value):
+        self._generator_matrix = value
+
+    @gf.setter
+    def gf(self, value):
+        self._gf = value
 
     
     @abstractmethod
