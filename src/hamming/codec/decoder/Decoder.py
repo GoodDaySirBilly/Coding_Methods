@@ -7,41 +7,40 @@ from abc import ABC, abstractmethod
 class Decoder(ABC):
 
     def __init__(self, code_length: int, base_length: int, gf: GaluaField):
-        self.code_length = code_length
-        self.base_length = base_length
-        self.exss_length = code_length - base_length
-        self.type = type
-        self.gf = gf
+        self._code_length = code_length
+        self._base_length = base_length
+        self._exss_length = code_length - base_length
+        self._gf = gf
 
-        self.parity_check_matrix = build_parity_check_matrix(
-            self.code_length, self.exss_length, gf
+        self._parity_check_matrix = build_parity_check_matrix(
+            self._code_length, self._exss_length, gf
         )
 
-        self.generator_matrix = build_generator_matrix(self.H)
+        self._generator_matrix = build_generator_matrix(self._parity_check_matrix)
 
     @property 
     def code_length(self):
-        return self.code_length
+        return self._code_length
 
     @property 
     def base_length(self):
-        return self.base_length
+        return self._base_length
 
     @property
     def exss_length(self):
-        return self.exss_length
+        return self._exss_length
 
     @property 
     def parity_check_matrix(self):
-        return self.parity_check_matrix
+        return self._parity_check_matrix
     
     @property
     def generator_matrix(self):
-        return self.generator_matrix
+        return self._generator_matrix
     
     @property 
     def gf(self):
-        return self.gf
+        return self._gf
     
     @code_length.setter
     def code_length(self, value):

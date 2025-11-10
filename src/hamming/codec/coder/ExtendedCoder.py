@@ -13,11 +13,11 @@ class ExtendedCoder(Coder):
 
         rows, cols = self.extend_parity.shape
 
-        self.extend_parity = np.concat([
+        self.extend_parity = np.concatenate([
             self.extend_parity, np.zeros([rows, 1], dtype=int), 
         ], axis=1)
 
-        self.extend_parity = np.concat([
+        self.extend_parity = np.concatenate([
             np.ones([1, cols + 1], dtype=int), self.extend_parity
         ], axis=0)
         
