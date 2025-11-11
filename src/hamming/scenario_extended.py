@@ -8,8 +8,9 @@ from hamming.ThreadGenerator import ThreadGenerator
 def run_scenario_extended():
     # Extended binary Hamming
     q = 2
-    n, k = 8, 4
+    n, k = 16, 12
     r = n - k
+
     gf = GaluaField(q, r, [1, 0, 0, 1, 1])
     codec = HammingCodec("extended", n, k, gf)
 
@@ -29,7 +30,7 @@ def run_scenario_extended():
         coded.astype(str), 
         [0.0, 0.0], # first is flip probability, second is erasure probability if you need erasures only use [0.0, 0.0]
         one_error_per_word=False, # add only one error per word
-        fixed_erasures_per_word=1 # number of erasures per word
+        fixed_erasures_per_word=3 # number of erasures per word
     )
     received = noisy
 

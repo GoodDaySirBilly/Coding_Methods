@@ -28,9 +28,9 @@ def run_scenario_classic():
 
     noisy = gen.generate_data_thread(
         coded.astype(str),  # map to symbol strings for channel
-        [0.5, 0.5],         # first is flip probability, second is erasure probability if you need erasures only use [0.0, 0.0]
-        one_error_per_word=True, # add only one error per word
-        fixed_erasures_per_word=0 # number of erasures per word
+        [0.0, 0.0],         # first is flip probability, second is erasure probability if you need erasures only use [0.0, 0.0]
+        one_error_per_word=False, # add only one error per word
+        fixed_erasures_per_word=2 # number of erasures per word
     )
     received = noisy
 
@@ -42,6 +42,14 @@ def run_scenario_classic():
         s_recv = ''.join(received[i].tolist())
         s_dec = ''.join(map(str, decoded_info[i].tolist()))
         print(f"{s_info} | {s_recv} | {s_dec}")
+
+    # Metrics similar to shortened scenario: check syndrome after correction
+    H = codec.decoder.parity_check_matrix
+    qch = codec.decoder.gf.chr
+    S_after = (H @ corrected.T) % qch
+    rows_still = np.where(np.any(S_after.T != 0, axis=1))[0]
+    print("After correction syndrome still != 0:", rows_still.tolist())
+
 
 if __name__ == "__main__":
     run_scenario_classic()

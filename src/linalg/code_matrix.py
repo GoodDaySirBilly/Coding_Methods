@@ -38,13 +38,28 @@ def build_parity_check_matrix(
         H[:, -exss_length:] = np.eye(exss_length, dtype=int)
         return H
 
-    # For q>2, build the full projective set of columns over F_q^r
-    # Enumerate all non-zero vectors in F_q^r, normalize by the first non-zero coordinate to 1,
-    # and keep one representative per 1-D subspace.
+    if q == 2 and n <= (1 << (r - 1)):
+        t = max(0, n - r)
+        odd_cols: list[np.ndarray] = []
+        for digits in np.ndindex(*(2 for _ in range(r))):
+            v = np.array(digits, dtype=int)
+            if np.all(v == 0):
+                continue
+            w = int(np.sum(v))
+            if (w % 2 == 1) and (w != 1):
+                odd_cols.append(v)
+        odd_cols.sort(key=lambda x: (-int(np.sum(x)), x.tolist()))
+        selected = odd_cols[:t]
+        identity = [np.eye(r, dtype=int)[:, i] for i in range(r)]
+        ordered_cols = selected + identity
+        H = np.zeros((r, n), dtype=int)
+        for j, col in enumerate(ordered_cols):
+            H[:, j] = col
+        return H
+
     seen: set[tuple[int, ...]] = set()
     proj_cols: list[np.ndarray] = []
     # generate all r-length vectors over [0..q-1] except the all-zero vector
-    # iterate in lexicographic order for determinism
     for digits in np.ndindex(*(q for _ in range(r))):
         v = np.array(digits, dtype=int) % q
         if np.all(v == 0):
