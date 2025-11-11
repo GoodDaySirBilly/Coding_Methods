@@ -48,7 +48,7 @@ class ShortenedDecoder(Decoder):
         q = self.gf.chr
         H = self.parity_check_matrix
 
-        # Handle erasures: if words contain 'z', solve for transmitted positions
+        # Handle erasures
         if words.dtype.type is np.str_ or words.dtype.kind in ('U', 'S'):
             sym = words
             corrected_full = np.zeros((words.shape[0], n_full), dtype=int)
@@ -65,7 +65,6 @@ class ShortenedDecoder(Decoder):
                 er_full_mask = np.zeros(n_full, dtype=bool)
                 er_full_mask[n_short_removed:] = er_mask_short
                 s = (H @ y) % q
-
                 if np.any(er_full_mask):
                     from linalg.code_matrix import solve_linear_mod
                     A = H[:, er_full_mask]
@@ -73,6 +72,12 @@ class ShortenedDecoder(Decoder):
                     x, ok = solve_linear_mod(A, b, q)
                     if ok:
                         y[er_full_mask] = x % q
+                else:
+                    if np.any(s != 0):
+                        from linalg.code_matrix import find_error_with_scalar
+                        j, a = find_error_with_scalar(s, H, q)
+                        if j is not None and a is not None and j >= n_short_removed:
+                            y[j] = (y[j] - a) % q
                 corrected_full[i] = y
 
             return corrected_full[:, n_short_removed:]

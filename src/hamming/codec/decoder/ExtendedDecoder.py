@@ -48,6 +48,7 @@ class ExtendedDecoder(Decoder):
                 data_int = np.zeros(data_sym.shape, dtype=int)
                 data_int[~er_mask] = np.array([int(c) for c in data_sym[~er_mask]], dtype=int)
 
+                # compute syndrome on known part
                 s = (H @ data_int) % q
                 if np.any(er_mask):
                     from linalg.code_matrix import solve_linear_mod
@@ -56,11 +57,28 @@ class ExtendedDecoder(Decoder):
                     x, ok = solve_linear_mod(A, b, q)
                     if ok:
                         data_int[er_mask] = x % q
-                # set parity to satisfy even parity in GF(2)
+                    # recompute syndrome after filling erasures
+                    s = (H @ data_int) % q
+
+                # handle parity symbol and possible single-error correction
                 parity_int = int(parity_sym) if parity_sym != 'z' else 0
-                needed_parity = (-np.sum(data_int)) % q
-                if parity_sym == 'z':
-                    parity_int = needed_parity
+                total_parity = (np.sum(data_int) + parity_int) % q
+
+                if np.all(s == 0):
+                    # no data error; if parity inconsistent, fix parity
+                    if total_parity != 0:
+                        parity_int = (-np.sum(data_int)) % q
+                else:
+                    # non-zero syndrome: if parity inconsistent, try single data-symbol correction
+                    if total_parity != 0:
+                        from linalg.code_matrix import find_error_with_scalar
+                        j, a = find_error_with_scalar(s, H, q)
+                        if j is not None and a is not None:
+                            data_int[j] = (data_int[j] - a) % q
+                            # after correction, enforce parity consistency
+                            parity_int = (-np.sum(data_int)) % q
+                    # else: detected double-error; leave as-is
+
                 corrected[i, :n] = data_int % q
                 corrected[i, n] = parity_int % q
             return corrected
