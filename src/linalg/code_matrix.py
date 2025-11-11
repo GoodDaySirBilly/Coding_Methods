@@ -26,7 +26,7 @@ def build_parity_check_matrix(
     # Work on a copy to avoid mutating gf.values globally across coder/decoder builds
     H_full = gf.values[1:, :].copy()  # shape: (q^r - 1) x r
 
-    if q == 2:
+    if q == 2 and n == (2 ** r - 1):
         # Legacy binary layout that existing tests rely on
         H = H_full
         H[0:exss_length] = np.flip(H[0:exss_length], axis=1)
@@ -182,7 +182,6 @@ def solve_linear_mod(
     row = 0
     pivots: list[int] = []
     for col in range(c):
-        # find pivot
         pivot_row = None
         for rr in range(row, r):
             if aug[rr, col] % q != 0:
@@ -190,15 +189,12 @@ def solve_linear_mod(
                 break
         if pivot_row is None:
             continue
-        # swap
         if pivot_row != row:
             tmp = aug[row, :].copy()
             aug[row, :] = aug[pivot_row, :]
             aug[pivot_row, :] = tmp
-        # normalize
         inv = _modinv(int(aug[row, col]), q)
         aug[row, :] = (aug[row, :] * inv) % q
-        # eliminate other rows
         for rr in range(r):
             if rr == row:
                 continue
@@ -209,9 +205,7 @@ def solve_linear_mod(
         row += 1
         if row == r:
             break
-
     # check consistency
-    # any row with all-zero A part but non-zero RHS -> inconsistent
     for rr in range(r):
         if np.all(aug[rr, :c] % q == 0) and (aug[rr, c] % q != 0):
             return None, False

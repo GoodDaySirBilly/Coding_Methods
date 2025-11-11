@@ -7,7 +7,7 @@ from hamming.ThreadGenerator import ThreadGenerator
 
 def run_scenario_classic():
     # q-ary classic Hamming over base field GF(q)
-    q = 2
+    q = 3
     n = 31
     k = 26
     r = n - k

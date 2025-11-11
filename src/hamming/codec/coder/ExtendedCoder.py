@@ -25,10 +25,9 @@ class ExtendedCoder(Coder):
     def code_words(self, words):
 
         result = words @ self.generator_matrix % self.gf.chr
-
         even_bits = np.sum(result, axis=1) % self.gf.chr
         even_bits = even_bits[:, np.newaxis]
 
-        result = np.concat([result, even_bits], axis=1)
+        result = np.concatenate([result, even_bits], axis=1)
 
         return result
