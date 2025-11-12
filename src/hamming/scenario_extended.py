@@ -8,10 +8,10 @@ from hamming.ThreadGenerator import ThreadGenerator
 def run_scenario_extended():
     # Extended binary Hamming
     q = 2
-    n, k = 16, 12
+    n, k = 32, 26
     r = n - k
 
-    gf = GaluaField(q, r, [1, 0, 0, 1, 1])
+    gf = GaluaField(q, r, [1, 1, 0, 0, 0, 0, 1])
     codec = HammingCodec("extended", n, k, gf)
 
     print("=== Extended binary Hamming ===")

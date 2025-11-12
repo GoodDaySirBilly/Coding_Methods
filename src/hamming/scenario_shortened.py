@@ -5,35 +5,44 @@ import numpy as np
 
 def run_scenario_shortened():
     # Shortened binary Hamming: from (7,4) to (6,3) by removing 1 front column
-    q = 3
-    n_full, k_full = 15, 11
+    q = 2
+    n_full, k_full = 35, 29
     r_full = n_full - k_full
     short_remove = 1
     n_short = n_full - short_remove
     k_short = k_full - short_remove
-    gf = GaluaField(q, r_full, [1, 0, 0, 1, 1])
+    gf = GaluaField(q, r_full, [1, 0, 0, 0, 0, 1, 1])
     codec = HammingCodec(
         "shortened", n_full, k_full, gf,
         short_code_length=short_remove, short_base_length=0
     )
 
     print("=== Shortened binary Hamming ===")
-    print("Generator matrix G (full) [k x n]:")
-    print(codec.coder.generator_matrix)
-    print("Parity-check matrix H (full) [r x n]:")
-    print(codec.decoder.parity_check_matrix)
-    print(f"Shortened lengths: n'={n_short}, k'={k_short}")
-    try:
-        from linalg.code_matrix import build_generator_matrix
-        H_full = codec.decoder.parity_check_matrix
-        H_short = H_full[:, short_remove:]
-        print("Parity-check matrix H' (shortened) [r x n']:")
-        print(H_short)
-        G_short = build_generator_matrix(H_short)
-        print("Generator matrix G' (shortened, derived from H') [k' x n']:")
-        print(G_short)
-    except Exception as _:
-        pass
+    with np.printoptions(threshold=np.inf, linewidth=10**6):
+        try:
+            from linalg.code_matrix import build_generator_matrix
+            H_full = codec.decoder.parity_check_matrix 
+            print("Parity-check matrix H (full) [r x n]:")
+            print(H_full)
+
+            G_full = build_generator_matrix(H_full)  # full G [k x n]
+            print("Generator matrix G (full, derived from H) [k x n]:")
+            print(G_full)
+
+            print(f"Shortened lengths: n'={n_short}, k'={k_short}")
+            H_short = H_full[:, short_remove:]  # H' [r x n']
+            print("Parity-check matrix H' (shortened) [r x n']:")
+            print(H_short)
+
+            G_short = build_generator_matrix(H_short)  # G' [k' x n']
+            print("Generator matrix G' (shortened, derived from H') [k' x n']:")
+            print(G_short)
+        except Exception as _:
+            print("Parity-check matrix H (full) [r x n]:")
+            print(codec.decoder.parity_check_matrix)
+            print("Generator matrix G' (shortened, from codec) [k' x n']:")
+            print(codec.coder.generator_matrix)
+            print(f"Shortened lengths: n'={n_short}, k'={k_short}")
     print()
 
 
