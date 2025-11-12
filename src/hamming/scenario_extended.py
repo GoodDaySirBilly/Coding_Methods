@@ -19,6 +19,22 @@ def run_scenario_extended():
     print(codec.coder.generator_matrix)
     print("Parity-check matrix H [r x n]:")
     print(codec.decoder.parity_check_matrix)
+
+    try:
+        H_ext = codec.coder.extend_parity 
+        print("Extended parity-check matrix H_ext [(r+1) x (n+1)]:")
+        print(H_ext)
+    except Exception:
+        pass
+
+    try:
+        G = codec.coder.generator_matrix
+        p = (np.sum(G, axis=1) % gf.chr)[:, np.newaxis]
+        G_ext = np.concatenate([G, p], axis=1)
+        print("Extended generator matrix G_ext [k x (n+1)]:")
+        print(G_ext)
+    except Exception:
+        pass
     print()
 
     base = ThreadGenerator.make_base(q, with_erasure=True) # even if you don't need erasures, you still should set true :)
