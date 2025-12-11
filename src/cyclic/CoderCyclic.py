@@ -5,6 +5,7 @@ class Coder:
         self.k = k
         self.n = n
         self.vect = vect
+        
         self.generator_matrix = np.zeros((k, n), dtype=int)
         self.generator_matrix[0, :len(vect)] = vect
         for i in range(1, k):

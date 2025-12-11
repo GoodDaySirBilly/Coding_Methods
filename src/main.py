@@ -7,26 +7,29 @@ from hamming.test_scenario import run_scenario
 from hamming.scenario_classic import run_scenario_classic
 from hamming.scenario_shortened import run_scenario_shortened
 from hamming.scenario_extended import run_scenario_extended
+from cyclic.run_cyclic import run_cyclic
 
 def main():
 
-    run_galua_tests()
+    #run_galua_tests()
     
-    run_hamming_tests()
+    #run_hamming_tests()
 
-    run_linalg_tests()
+    #run_linalg_tests()
 
-    run_coder_tests()
+    #run_coder_tests()
 
-    run_decoder_tests()
+    #run_decoder_tests()
 
     #run_scenario()
 
-    run_scenario_classic()
+    #run_scenario_classic()
 
-    run_scenario_shortened()
+    #run_scenario_shortened()
 
-    run_scenario_extended()
+    #run_scenario_extended()
+
+    run_cyclic()
 
 if __name__ == '__main__':
     main()

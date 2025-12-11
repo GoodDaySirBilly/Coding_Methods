@@ -1,4 +1,5 @@
 import numpy as np
+from linalg.code_matrix import find_error_with_scalar, solve_linear_mod
 
 class Decoder:
     def __init__(self, k, n, vect):
@@ -29,7 +30,6 @@ class Decoder:
                 known_int[~er_mask] = np.array([int(c) for c in row[~er_mask]], dtype=int)
                 s = (H @ known_int) % q
                 if np.any(er_mask):
-                    from linalg.code_matrix import solve_linear_mod
                     A = H[:, er_mask]
                     b = (-s) % q
                     x, ok = solve_linear_mod(A, b, q)
@@ -44,7 +44,6 @@ class Decoder:
                 if np.all(s == 0):
                     corrected[i] = y
                     continue
-                from linalg.code_matrix import find_error_with_scalar
                 j, a = find_error_with_scalar(s, H, q)
                 if j is not None and a is not None:
                     y[j] = (y[j] - a) % q
@@ -62,7 +61,6 @@ class Decoder:
             if np.all(s == 0):
                 continue
 
-            from linalg.code_matrix import find_error_with_scalar
             j, a = find_error_with_scalar(s, H, q)
             if j is not None and a is not None:
                 corrected[i, j] = (corrected[i, j] - a) % q
