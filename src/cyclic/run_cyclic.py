@@ -1,5 +1,6 @@
 from .CoderCyclic import Coder
 from .DecoderCyclic import Decoder
+from .cyclic_check import run_cyclic_check
 from hamming.ThreadGenerator import ThreadGenerator
 
 def run_cyclic():
@@ -31,10 +32,13 @@ def run_cyclic():
     decoder = Decoder(k, n, poly)
     print(f"\n\n---- Check matrix {r} x {n} ----")
     print(decoder.check_matrix)
+    print()
     decoded = decoder.detect_and_correct(received_int)
     print("   info  |       coded       |      decoded ")
-    for i in range(words.shape[0]):
+    for i in range(words.shape[0]): 
         s_info = ''.join(map(str, words[i].tolist()))
         s_code = ''.join(map(str, coded[i].tolist()))
         s_dec = ''.join(map(str, decoded[i].tolist()))
         print(f"{s_info} | {s_code} |{s_dec}")
+    
+    run_cyclic_check(n, k, poly)
