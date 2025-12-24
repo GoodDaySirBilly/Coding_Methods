@@ -8,6 +8,7 @@ from hamming.scenario_classic import run_scenario_classic
 from hamming.scenario_shortened import run_scenario_shortened
 from hamming.scenario_extended import run_scenario_extended
 from cyclic.run_cyclic import run_cyclic
+from bch.run_bch import run_bch
 
 def main():
 
@@ -29,7 +30,9 @@ def main():
 
     #run_scenario_extended()
 
-    run_cyclic()
+    #run_cyclic()
+
+    run_bch()
 
 if __name__ == '__main__':
     main()
